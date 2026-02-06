@@ -1,12 +1,13 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 3,
+  "projectStateVersion": 5,
   "summary": "New project",
   "architectural_notes": [],
   "known_issues": [
-    "Admin panel Stripe test/live mode status is unclear; user cannot reliably tell if the site is in test mode or live mode"
+    "Admin panel Stripe test/live mode status is unclear; user cannot reliably tell if the site is in test mode or live mode",
+    "App loads to a black screen after the latest deployment (Version 47)"
   ],
-  "isFixRequest": false,
+  "isFixRequest": true,
   "existing_features": [
     {
       "id": "feature-in-the-admin-panel-stripe-configuration-screen-add-an-always-visible-stripe-mode-status-indicator-next-to-the-existing-stripe-test-live-mode-control-that-clearly-shows-green-light-small-circular-led-style-dot-when-stripe-is-in-live-mode-red-light-small-circular-led-style-dot-when-stripe-is-in-test-mode-also-add-a-short-unambiguous-label-under-near-the-indicator-e-g-live-payments-active-vs-test-mode-sandbox-only",
@@ -37,6 +38,30 @@
       "title": "Ensure the Stripe verification status used to drive the operational status section and globe indicator auto-refreshes periodically while the admin panel is open so the state does not appear stale.",
       "reqIds": [
         "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-identify-and-fix-the-cause-of-the-production-black-screen-so-the-app-reliably-renders-the-initial-ui-instead-of-staying-blank",
+      "title": "Identify and fix the cause of the production black screen so the app reliably renders the initial UI instead of staying blank.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-prevent-runtime-crashes-caused-by-process-env-usage-in-the-frontend-by-adding-a-safe-process-env-polyfill-before-the-react-bundle-executes-without-modifying-any-files-under-frontend-src-hooks-useinternetidentity-ts",
+      "title": "Prevent runtime crashes caused by `process.env` usage in the frontend by adding a safe `process.env` polyfill before the React bundle executes (without modifying any files under frontend/src/hooks/useInternetIdentity.ts).",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-remaining-unsafe-references-to-process-env-node-env-from-editable-react-source-e-g-frontend-src-app-tsx-by-switching-to-a-vite-compatible-environment-check-so-the-app-does-not-depend-on-the-process-global",
+      "title": "Remove remaining unsafe references to `process.env.NODE_ENV` from editable React source (e.g., frontend/src/App.tsx) by switching to a Vite-compatible environment check so the app does not depend on the `process` global.",
+      "reqIds": [
+        "REQ-7"
       ],
       "version": 1
     }

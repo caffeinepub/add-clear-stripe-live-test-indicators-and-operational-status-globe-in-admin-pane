@@ -1,78 +1,57 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Admin Stripe Config: mode LED indicator + operational status globe with auto-refresh",
+  "title": "Resolve production black screen on load (Version 47)",
   "requirements": [
     {
-      "id": "REQ-1",
-      "summary": "Add an always-visible Stripe Mode Status LED indicator (green=Live, red=Test) with clear label adjacent to the existing Stripe mode control in AdminStripeConfig.",
+      "id": "REQ-5",
+      "summary": "Ensure the app reliably mounts and renders an initial UI in production, and never remains a blank black screen (including providing a pre-mount crash fallback).",
       "acceptanceCriteria": [
-        "When the Stripe mode toggle is set to Live, a green LED-style dot is shown and the label indicates Live payments are active.",
-        "When the Stripe mode toggle is set to Test, a red LED-style dot is shown and the label indicates Test/sandbox mode.",
-        "The indicator is visually adjacent to the existing Stripe Mode control in AdminStripeConfig and requires no page scrolling to find."
+        "Loading the deployed app shows the normal UI (Hero / initialization screen) instead of a blank black screen.",
+        "The browser console no longer shows a fatal startup exception that prevents React from mounting.",
+        "If an unexpected runtime error occurs, the app displays an error fallback UI (not a blank screen)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/AdminStripeConfig.tsx",
+          "path": "frontend/index.html",
           "operation": "modify",
-          "description": "In the existing \"Stripe Mode\" card, add a small LED-style dot indicator and concise English label that always reflects the current Stripe mode toggle state (Live/Test) and is placed directly next to/within the Stripe Mode control area (no scrolling needed)."
-        }
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "summary": "Add a Site Operational Status section inside the Stripe Config tab that shows exactly one of three plain-English states derived from Stripe verification status and mode.",
-      "acceptanceCriteria": [
-        "The admin can see one of exactly three states: Operational/Accepting funds, Test mode, or Standby.",
-        "The displayed state updates when the Stripe verification status changes (without requiring a full page reload).",
-        "All user-facing text in this section is in English."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/AdminStripeConfig.tsx",
-          "operation": "modify",
-          "description": "Add a new \"Site Operational Status\" section (within AdminStripeConfig) that computes and displays exactly one state based on the current Stripe verification status: Operational/Accepting funds when keys are verified and mode is Live; Test mode when keys are verified and mode is Test; Standby when not verified/invalid or unavailable. Ensure all text is plain English and updates reactively from query data."
-        }
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "summary": "Implement an in-app globe status icon for the Site Operational Status section: glowing colorful and continuously spinning when operational; gray and static otherwise.",
-      "acceptanceCriteria": [
-        "Operational state shows a visibly glowing, colored globe with a continuous spin animation.",
-        "Non-operational states show a gray globe with no animation and no glow.",
-        "The globe is present within the Admin Stripe Config area and is clearly associated with the site operational status."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/AdminOperationalStatusGlobe.tsx",
-          "operation": "create",
-          "description": "Create a reusable admin-only UI component that renders a globe icon reflecting operational state: when operational, render a colorful/illuminated (glow effect) globe with continuous spin; when non-operational, render a gray/unlit globe with no animation. Use only in-app UI rendering (no external services)."
+          "description": "Add a lightweight pre-React startup guard: (1) ensure #root has a minimal initial loading UI to avoid a blank screen while the JS bundle loads; (2) register window-level error and unhandledrejection handlers that replace #root with a basic English error fallback message if a fatal error happens before React mounts."
         },
         {
-          "path": "frontend/src/components/AdminStripeConfig.tsx",
+          "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Wire the globe component into the new \"Site Operational Status\" section so it is visually associated with the state text; pass the computed operational state to control glow/spin vs gray/static behavior."
+          "description": "Harden startup rendering paths to avoid blank output: keep the existing ErrorBoundary and initialization screen, and ensure any error-detail gating uses Vite-compatible environment checks (so the ErrorFallback itself cannot throw)."
         }
       ]
     },
     {
-      "id": "REQ-4",
-      "summary": "Auto-refresh Stripe verification status while the Stripe Config tab is open so operational state and globe do not become stale.",
+      "id": "REQ-6",
+      "summary": "Add a safe `process.env` polyfill that executes before the React bundle to prevent `process is not defined` crashes (without modifying immutable hook files).",
       "acceptanceCriteria": [
-        "While viewing the Stripe Config tab, the Stripe verification status query re-fetches on an interval (e.g., every few seconds) and the UI updates accordingly.",
-        "No console errors occur due to repeated polling/refetching."
+        "On a fresh page load, the app does not throw `ReferenceError: process is not defined`.",
+        "`process.env.II_URL` is defined at runtime (via the polyfill) so Internet Identity login can initialize without crashing.",
+        "`process.env.NODE_ENV` is defined at runtime (via the polyfill) so environment checks do not crash the app."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useQueries.ts",
+          "path": "frontend/index.html",
           "operation": "modify",
-          "description": "Update the Stripe verification status query hook to support interval-based refetching (polling) while preserving safe behavior when the actor is unavailable, so AdminStripeConfig can keep status fresh without requiring a full page reload."
-        },
+          "description": "Insert an inline script in <head> (before the module script tag that loads /src/main.tsx) that defines globalThis.process if missing and ensures process.env exists with at least II_URL and NODE_ENV populated (using safe defaults and non-destructive assignment so it won’t override if already defined)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Remove remaining editable frontend usages of `process.env.NODE_ENV` by switching to Vite-compatible environment checks.",
+      "acceptanceCriteria": [
+        "The frontend codebase no longer relies on `process.env.NODE_ENV` in editable files (e.g., App.tsx).",
+        "The app builds and runs in production without requiring Node-style `process` globals beyond the REQ-6 polyfill (which exists to support immutable hook code)."
+      ],
+      "file_operations": [
         {
-          "path": "frontend/src/components/AdminStripeConfig.tsx",
+          "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Use the updated Stripe verification status hook in AdminStripeConfig with a periodic refetch interval active while the component/tab is mounted, and ensure computed operational state + globe update live without generating console errors during repeated polling."
+          "description": "Replace `process.env.NODE_ENV === 'development'` checks with Vite-compatible checks (e.g., import.meta.env.DEV / import.meta.env.MODE) so editable code no longer depends on Node-style process globals."
         }
       ]
     }

@@ -57,6 +57,9 @@ function LoadingFallback() {
 
 // Error boundary fallback component
 function ErrorFallback({ error, resetError }: { error: Error; resetError: () => void }) {
+  // Use Vite environment check instead of process.env
+  const isDevelopment = import.meta.env.DEV;
+  
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-background via-primary/5 to-secondary/5">
       <div className="max-w-md w-full space-y-6 text-center">
@@ -68,7 +71,7 @@ function ErrorFallback({ error, resetError }: { error: Error; resetError: () => 
           <p className="text-sm sm:text-base text-muted-foreground">
             We encountered an unexpected error. Please try refreshing the page.
           </p>
-          {process.env.NODE_ENV === 'development' && (
+          {isDevelopment && (
             <details className="mt-4 text-left">
               <summary className="cursor-pointer text-sm text-muted-foreground hover:text-foreground">
                 Error details
@@ -108,9 +111,9 @@ class ErrorBoundary extends React.Component<
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('Error boundary caught:', error, errorInfo);
-    // Production error tracking
-    if (typeof window !== 'undefined' && window.Sentry) {
-      window.Sentry.captureException(error, {
+    // Production error tracking (safe check for Sentry)
+    if (typeof window !== 'undefined' && (window as any).Sentry) {
+      (window as any).Sentry.captureException(error, {
         contexts: { react: { componentStack: errorInfo.componentStack } },
       });
     }

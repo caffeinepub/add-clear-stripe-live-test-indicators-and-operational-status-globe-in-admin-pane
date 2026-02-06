@@ -253,6 +253,40 @@
     ═══════════════════════════════════════════════════════════════════════════════
     -->
 
+    <!-- 
+    ═══════════════════════════════════════════════════════════════════════════════
+    CRITICAL: Process polyfill for Internet Identity and environment checks
+    This MUST execute before the React bundle loads to prevent ReferenceError
+    ═══════════════════════════════════════════════════════════════════════════════
+    -->
+    <script>
+      (function() {
+        // Only define if not already present (non-destructive)
+        if (typeof globalThis.process === 'undefined') {
+          globalThis.process = {
+            env: {
+              NODE_ENV: 'production',
+              II_URL: 'https://identity.ic0.app'
+            }
+          };
+        } else if (!globalThis.process.env) {
+          globalThis.process.env = {
+            NODE_ENV: 'production',
+            II_URL: 'https://identity.ic0.app'
+          };
+        } else {
+          // Ensure required keys exist
+          if (!globalThis.process.env.NODE_ENV) {
+            globalThis.process.env.NODE_ENV = 'production';
+          }
+          if (!globalThis.process.env.II_URL) {
+            globalThis.process.env.II_URL = 'https://identity.ic0.app';
+          }
+        }
+        console.log('[Polyfill] ✅ process.env initialized:', globalThis.process.env);
+      })();
+    </script>
+
     <!-- Google Analytics (GA4) - LIVE AND VERIFIED -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
     <script>
@@ -396,6 +430,98 @@
       console.log('  📊 CTR, Conversions, Cost-Per-Conversion, ROI');
       console.log('  📊 Lead capture rates and campaign performance');
       console.log('%c🎯 View live performance in Marketing Dashboard', 'color: #10b981; font-weight: bold; font-size: 13px; margin-top: 8px;');
+    </script>
+
+    <style>
+      /* Pre-React loading UI to prevent blank screen */
+      #root:empty::before {
+        content: '';
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 48px;
+        height: 48px;
+        border: 4px solid rgba(139, 92, 246, 0.2);
+        border-top-color: rgb(139, 92, 246);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      #root:empty::after {
+        content: 'Loading your career journey...';
+        position: fixed;
+        top: calc(50% + 48px);
+        left: 50%;
+        transform: translateX(-50%);
+        color: #6b7280;
+        font-family: system-ui, -apple-system, sans-serif;
+        font-size: 14px;
+        margin-top: 16px;
+        animation: pulse 2s ease-in-out infinite;
+      }
+      
+      @keyframes spin {
+        to { transform: translate(-50%, -50%) rotate(360deg); }
+      }
+      
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+      
+      .skip-to-main {
+        position: absolute;
+        left: -9999px;
+        z-index: 999;
+      }
+      
+      .skip-to-main:focus {
+        left: 50%;
+        transform: translateX(-50%);
+        top: 1rem;
+        background: white;
+        padding: 0.5rem 1rem;
+        border-radius: 0.375rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+
+    <!-- Pre-React error handler to prevent blank screen on fatal errors -->
+    <script>
+      (function() {
+        var errorCount = 0;
+        var maxErrors = 3;
+        
+        function showErrorUI(message) {
+          var root = document.getElementById('root');
+          if (root && errorCount < maxErrors) {
+            errorCount++;
+            root.innerHTML = 
+              '<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem; background: linear-gradient(to bottom right, #f9fafb, #f3f4f6);">' +
+                '<div style="max-width: 28rem; width: 100%; text-align: center; font-family: system-ui, -apple-system, sans-serif;">' +
+                  '<div style="width: 4rem; height: 4rem; margin: 0 auto 1.5rem; border-radius: 50%; background: rgba(239, 68, 68, 0.1); display: flex; align-items: center; justify-content: center;">' +
+                    '<svg style="width: 2rem; height: 2rem; color: rgb(239, 68, 68);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>' +
+                  '</div>' +
+                  '<h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem; color: #111827;">Something went wrong</h2>' +
+                  '<p style="color: #6b7280; margin-bottom: 1.5rem;">We encountered an unexpected error. Please refresh the page to try again.</p>' +
+                  '<button onclick="window.location.reload()" style="background: rgb(139, 92, 246); color: white; padding: 0.75rem 1.5rem; border-radius: 0.5rem; border: none; font-weight: 500; cursor: pointer; font-size: 1rem;">Refresh Page</button>' +
+                  '<p style="color: #9ca3af; font-size: 0.875rem; margin-top: 1rem;">Error: ' + message + '</p>' +
+                '</div>' +
+              '</div>';
+          }
+        }
+        
+        window.addEventListener('error', function(event) {
+          console.error('[Pre-React Error Handler]', event.error || event.message);
+          showErrorUI(event.error?.message || event.message || 'Unknown error');
+        });
+        
+        window.addEventListener('unhandledrejection', function(event) {
+          console.error('[Pre-React Unhandled Rejection]', event.reason);
+          showErrorUI(event.reason?.message || 'Promise rejection');
+        });
+      })();
     </script>
   </head>
   <body>

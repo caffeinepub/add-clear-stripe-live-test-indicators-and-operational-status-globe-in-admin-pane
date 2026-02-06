@@ -1,12 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Make Stripe live/test status and overall site operational status unmistakably clear in the Admin Stripe Config tab, with auto-refreshing state and a visual globe indicator.
+**Goal:** Fix the production “black screen on load” after Version 47 so the app reliably renders its initial UI and does not crash during startup.
 
 **Planned changes:**
-- Add an always-visible “Stripe Mode Status” indicator next to the existing Stripe test/live control, showing a green LED-style dot + “Live payments active” label for Live, and a red dot + “Test mode — sandbox only” label for Test.
-- Add a “Site Operational Status” section within the Stripe Config tab that displays exactly one of three plain-English states: Operational/Accepting funds, Test mode, or Standby (based on Stripe verification status + Stripe mode).
-- Add a globe status icon component in the Site Operational Status section: colored/glowing and continuously spinning when Operational/Accepting funds; gray/unlit and static when Test mode or Standby.
-- Ensure the Stripe verification status driving these indicators auto-refreshes periodically while the Stripe Config tab is open, updating the UI without a full page reload.
+- Diagnose and fix the fatal frontend startup error that prevents React from mounting in production.
+- Add a safe `process.env` polyfill that runs before the React bundle executes to prevent `process is not defined` crashes (without modifying immutable hook files).
+- Replace editable frontend references to `process.env.NODE_ENV` (e.g., in `frontend/src/App.tsx`) with a Vite-compatible environment check.
+- Add/ensure an error fallback UI is shown if an unexpected runtime error occurs (instead of a blank screen).
 
-**User-visible outcome:** Admins can instantly tell whether Stripe is in Live or Test mode and whether the site is operational/accepting funds, test-only, or on standby, with a clear animated globe indicator that stays up to date while the page is open.
+**User-visible outcome:** Loading the deployed app shows the normal initial UI (not a blank black screen), and unexpected startup/runtime errors show a visible fallback screen rather than preventing the app from rendering.

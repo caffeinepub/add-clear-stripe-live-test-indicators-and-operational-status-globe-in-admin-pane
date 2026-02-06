@@ -2,10 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-in-the-admin-panel-stripe-configuration-screen-add-an-always-visible-stripe-mode-status-indicator-next-to-the-existing-stripe-test-live-mode-control-that-clearly-shows-green-light-small-circular-led-style-dot-when-stripe-is-in-live-mode-red-light-small-circular-led-style-dot-when-stripe-is-in-test-mode-also-add-a-short-unambiguous-label-under-near-the-indicator-e-g-live-payments-active-vs-test-mode-sandbox-only",
-      "featureTitle": "In the Admin panel Stripe configuration screen, add an always-visible \"Stripe Mode Status\" indicator next to the existing Stripe test/live mode control that clearly shows:\n- Green light (small circular LED-style dot) when Stripe is in Live mode\n- Red light (small circular LED-style dot) when Stripe is in Test mode\nAlso add a short, unambiguous label under/near the indicator (e.g., \"Live payments active\" vs \"Test mode — sandbox only\").",
+      "featureId": "feature-identify-and-fix-the-cause-of-the-production-black-screen-so-the-app-reliably-renders-the-initial-ui-instead-of-staying-blank",
+      "featureTitle": "Identify and fix the cause of the production black screen so the app reliably renders the initial UI instead of staying blank.",
       "files": [
-        "frontend/src/components/AdminStripeConfig.tsx"
+        "frontend/index.html",
+        "frontend/src/App.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -19,15 +20,15 @@
         "stripe@3.0.0"
       ],
       "testIds": [
-        "REQ-1"
+        "REQ-5"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-a-site-operational-status-section-to-the-admin-panel-within-the-stripe-config-tab-that-summarizes-whether-the-site-is-operational-and-accepting-funds-in-test-mode-or-in-standby-based-on-the-current-stripe-verification-status-operational-accepting-funds-stripe-keys-verified-and-stripe-mode-is-live-test-mode-stripe-keys-verified-and-stripe-mode-is-test-standby-stripe-keys-are-not-verified-invalid-or-verification-status-is-unavailable-the-section-must-show-the-current-state-as-plain-english-text",
-      "featureTitle": "Add a \"Site Operational Status\" section to the admin panel (within the Stripe Config tab) that summarizes whether the site is operational and accepting funds, in test mode, or in standby, based on the current Stripe verification status:\n- Operational / Accepting funds: Stripe keys verified AND Stripe mode is Live\n- Test mode: Stripe keys verified AND Stripe mode is Test\n- Standby: Stripe keys are not verified/invalid OR verification status is unavailable\nThe section must show the current state as plain English text.",
+      "featureId": "feature-prevent-runtime-crashes-caused-by-process-env-usage-in-the-frontend-by-adding-a-safe-process-env-polyfill-before-the-react-bundle-executes-without-modifying-any-files-under-frontend-src-hooks-useinternetidentity-ts",
+      "featureTitle": "Prevent runtime crashes caused by `process.env` usage in the frontend by adding a safe `process.env` polyfill before the React bundle executes (without modifying any files under frontend/src/hooks/useInternetIdentity.ts).",
       "files": [
-        "frontend/src/components/AdminStripeConfig.tsx"
+        "frontend/index.html"
       ],
       "components": [
         "authorization@4.0.0",
@@ -41,16 +42,15 @@
         "stripe@3.0.0"
       ],
       "testIds": [
-        "REQ-2"
+        "REQ-6"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-implement-a-globe-status-icon-in-the-site-operational-status-section-that-visually-reflects-operational-state-when-operational-accepting-funds-globe-is-colorful-illuminated-glow-effect-and-continuously-spinning-when-not-operational-test-mode-or-standby-globe-is-gray-unlit-and-does-not-animate-the-globe-must-be-implemented-as-a-ui-icon-component-rendered-in-the-admin-panel-no-external-services",
-      "featureTitle": "Implement a globe status icon in the \"Site Operational Status\" section that visually reflects operational state:\n- When Operational/Accepting funds: globe is colorful/illuminated (glow effect) and continuously spinning\n- When not operational (Test mode or Standby): globe is gray/unlit and does not animate\nThe globe must be implemented as a UI icon/component rendered in the admin panel (no external services).",
+      "featureId": "feature-remove-remaining-unsafe-references-to-process-env-node-env-from-editable-react-source-e-g-frontend-src-app-tsx-by-switching-to-a-vite-compatible-environment-check-so-the-app-does-not-depend-on-the-process-global",
+      "featureTitle": "Remove remaining unsafe references to `process.env.NODE_ENV` from editable React source (e.g., frontend/src/App.tsx) by switching to a Vite-compatible environment check so the app does not depend on the `process` global.",
       "files": [
-        "frontend/src/components/AdminOperationalStatusGlobe.tsx",
-        "frontend/src/components/AdminStripeConfig.tsx"
+        "frontend/src/App.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -64,30 +64,7 @@
         "stripe@3.0.0"
       ],
       "testIds": [
-        "REQ-3"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-ensure-the-stripe-verification-status-used-to-drive-the-operational-status-section-and-globe-indicator-auto-refreshes-periodically-while-the-admin-panel-is-open-so-the-state-does-not-appear-stale",
-      "featureTitle": "Ensure the Stripe verification status used to drive the operational status section and globe indicator auto-refreshes periodically while the admin panel is open so the state does not appear stale.",
-      "files": [
-        "frontend/src/components/AdminStripeConfig.tsx",
-        "frontend/src/hooks/useQueries.ts"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "http-outcalls@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "blob-storage@4.0.0",
-        "github-export-icp-cli@1.0.0",
-        "stripe@3.0.0"
-      ],
-      "testIds": [
-        "REQ-4"
+        "REQ-7"
       ],
       "confidence": "high"
     }
