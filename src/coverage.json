@@ -1,0 +1,88 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-06T04:03:18.871Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 4,
+    "implemented": 4,
+    "items": [
+      {
+        "id": "REQ-1",
+        "summary": "In the Admin panel Stripe configuration screen, add an always-visible \"Stripe Mode Status\" indicator next to the existing Stripe test/live mode control that clearly shows:\n- Green light (small circular LED-style dot) when Stripe is in Live mode\n- Red light (small circular LED-style dot) when Stripe is in Test mode\nAlso add a short, unambiguous label under/near the indicator (e.g., \"Live payments active\" vs \"Test mode — sandbox only\").",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/AdminStripeConfig.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/AdminStripeConfig.tsx"
+        ]
+      },
+      {
+        "id": "REQ-2",
+        "summary": "Add a \"Site Operational Status\" section to the admin panel (within the Stripe Config tab) that summarizes whether the site is operational and accepting funds, in test mode, or in standby, based on the current Stripe verification status:\n- Operational / Accepting funds: Stripe keys verified AND Stripe mode is Live\n- Test mode: Stripe keys verified AND Stripe mode is Test\n- Standby: Stripe keys are not verified/invalid OR verification status is unavailable\nThe section must show the current state as plain English text.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/AdminStripeConfig.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/AdminStripeConfig.tsx"
+        ]
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Implement a globe status icon in the \"Site Operational Status\" section that visually reflects operational state:\n- When Operational/Accepting funds: globe is colorful/illuminated (glow effect) and continuously spinning\n- When not operational (Test mode or Standby): globe is gray/unlit and does not animate\nThe globe must be implemented as a UI icon/component rendered in the admin panel (no external services).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/AdminOperationalStatusGlobe.tsx",
+          "frontend/src/components/AdminStripeConfig.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/AdminOperationalStatusGlobe.tsx",
+          "frontend/src/components/AdminStripeConfig.tsx"
+        ]
+      },
+      {
+        "id": "REQ-4",
+        "summary": "Ensure the Stripe verification status used to drive the operational status section and globe indicator auto-refreshes periodically while the admin panel is open so the state does not appear stale.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/AdminStripeConfig.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/AdminStripeConfig.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "backend/stripe/stripe.mo",
+    "build-request.json",
+    "build-template/Dockerfile",
+    "build-template/LICENSE",
+    "build-template/README.md",
+    "build-template/deploy.sh",
+    "build-template/icp.yaml",
+    "build-template/src/backend/canister.yaml",
+    "build-template/src/frontend/canister.yaml",
+    "caffeine.lock.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/components/AdminOperationalStatusGlobe.tsx",
+    "frontend/src/components/AdminStripeConfig.tsx",
+    "frontend/src/config.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

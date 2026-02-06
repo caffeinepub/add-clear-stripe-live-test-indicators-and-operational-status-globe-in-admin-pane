@@ -1,0 +1,80 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Admin Stripe Config: mode LED indicator + operational status globe with auto-refresh",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Add an always-visible Stripe Mode Status LED indicator (green=Live, red=Test) with clear label adjacent to the existing Stripe mode control in AdminStripeConfig.",
+      "acceptanceCriteria": [
+        "When the Stripe mode toggle is set to Live, a green LED-style dot is shown and the label indicates Live payments are active.",
+        "When the Stripe mode toggle is set to Test, a red LED-style dot is shown and the label indicates Test/sandbox mode.",
+        "The indicator is visually adjacent to the existing Stripe Mode control in AdminStripeConfig and requires no page scrolling to find."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/AdminStripeConfig.tsx",
+          "operation": "modify",
+          "description": "In the existing \"Stripe Mode\" card, add a small LED-style dot indicator and concise English label that always reflects the current Stripe mode toggle state (Live/Test) and is placed directly next to/within the Stripe Mode control area (no scrolling needed)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Add a Site Operational Status section inside the Stripe Config tab that shows exactly one of three plain-English states derived from Stripe verification status and mode.",
+      "acceptanceCriteria": [
+        "The admin can see one of exactly three states: Operational/Accepting funds, Test mode, or Standby.",
+        "The displayed state updates when the Stripe verification status changes (without requiring a full page reload).",
+        "All user-facing text in this section is in English."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/AdminStripeConfig.tsx",
+          "operation": "modify",
+          "description": "Add a new \"Site Operational Status\" section (within AdminStripeConfig) that computes and displays exactly one state based on the current Stripe verification status: Operational/Accepting funds when keys are verified and mode is Live; Test mode when keys are verified and mode is Test; Standby when not verified/invalid or unavailable. Ensure all text is plain English and updates reactively from query data."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Implement an in-app globe status icon for the Site Operational Status section: glowing colorful and continuously spinning when operational; gray and static otherwise.",
+      "acceptanceCriteria": [
+        "Operational state shows a visibly glowing, colored globe with a continuous spin animation.",
+        "Non-operational states show a gray globe with no animation and no glow.",
+        "The globe is present within the Admin Stripe Config area and is clearly associated with the site operational status."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/AdminOperationalStatusGlobe.tsx",
+          "operation": "create",
+          "description": "Create a reusable admin-only UI component that renders a globe icon reflecting operational state: when operational, render a colorful/illuminated (glow effect) globe with continuous spin; when non-operational, render a gray/unlit globe with no animation. Use only in-app UI rendering (no external services)."
+        },
+        {
+          "path": "frontend/src/components/AdminStripeConfig.tsx",
+          "operation": "modify",
+          "description": "Wire the globe component into the new \"Site Operational Status\" section so it is visually associated with the state text; pass the computed operational state to control glow/spin vs gray/static behavior."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Auto-refresh Stripe verification status while the Stripe Config tab is open so operational state and globe do not become stale.",
+      "acceptanceCriteria": [
+        "While viewing the Stripe Config tab, the Stripe verification status query re-fetches on an interval (e.g., every few seconds) and the UI updates accordingly.",
+        "No console errors occur due to repeated polling/refetching."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Update the Stripe verification status query hook to support interval-based refetching (polling) while preserving safe behavior when the actor is unavailable, so AdminStripeConfig can keep status fresh without requiring a full page reload."
+        },
+        {
+          "path": "frontend/src/components/AdminStripeConfig.tsx",
+          "operation": "modify",
+          "description": "Use the updated Stripe verification status hook in AdminStripeConfig with a periodic refetch interval active while the component/tab is mounted, and ensure computed operational state + globe update live without generating console errors during repeated polling."
+        }
+      ]
+    }
+  ]
+}

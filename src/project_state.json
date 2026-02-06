@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "New project",
+  "architectural_notes": [],
+  "known_issues": [
+    "Admin panel Stripe test/live mode status is unclear; user cannot reliably tell if the site is in test mode or live mode"
+  ],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-in-the-admin-panel-stripe-configuration-screen-add-an-always-visible-stripe-mode-status-indicator-next-to-the-existing-stripe-test-live-mode-control-that-clearly-shows-green-light-small-circular-led-style-dot-when-stripe-is-in-live-mode-red-light-small-circular-led-style-dot-when-stripe-is-in-test-mode-also-add-a-short-unambiguous-label-under-near-the-indicator-e-g-live-payments-active-vs-test-mode-sandbox-only",
+      "title": "In the Admin panel Stripe configuration screen, add an always-visible \"Stripe Mode Status\" indicator next to the existing Stripe test/live mode control that clearly shows:\n- Green light (small circular LED-style dot) when Stripe is in Live mode\n- Red light (small circular LED-style dot) when Stripe is in Test mode\nAlso add a short, unambiguous label under/near the indicator (e.g., \"Live payments active\" vs \"Test mode — sandbox only\").",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-site-operational-status-section-to-the-admin-panel-within-the-stripe-config-tab-that-summarizes-whether-the-site-is-operational-and-accepting-funds-in-test-mode-or-in-standby-based-on-the-current-stripe-verification-status-operational-accepting-funds-stripe-keys-verified-and-stripe-mode-is-live-test-mode-stripe-keys-verified-and-stripe-mode-is-test-standby-stripe-keys-are-not-verified-invalid-or-verification-status-is-unavailable-the-section-must-show-the-current-state-as-plain-english-text",
+      "title": "Add a \"Site Operational Status\" section to the admin panel (within the Stripe Config tab) that summarizes whether the site is operational and accepting funds, in test mode, or in standby, based on the current Stripe verification status:\n- Operational / Accepting funds: Stripe keys verified AND Stripe mode is Live\n- Test mode: Stripe keys verified AND Stripe mode is Test\n- Standby: Stripe keys are not verified/invalid OR verification status is unavailable\nThe section must show the current state as plain English text.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-globe-status-icon-in-the-site-operational-status-section-that-visually-reflects-operational-state-when-operational-accepting-funds-globe-is-colorful-illuminated-glow-effect-and-continuously-spinning-when-not-operational-test-mode-or-standby-globe-is-gray-unlit-and-does-not-animate-the-globe-must-be-implemented-as-a-ui-icon-component-rendered-in-the-admin-panel-no-external-services",
+      "title": "Implement a globe status icon in the \"Site Operational Status\" section that visually reflects operational state:\n- When Operational/Accepting funds: globe is colorful/illuminated (glow effect) and continuously spinning\n- When not operational (Test mode or Standby): globe is gray/unlit and does not animate\nThe globe must be implemented as a UI icon/component rendered in the admin panel (no external services).",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-stripe-verification-status-used-to-drive-the-operational-status-section-and-globe-indicator-auto-refreshes-periodically-while-the-admin-panel-is-open-so-the-state-does-not-appear-stale",
+      "title": "Ensure the Stripe verification status used to drive the operational status section and globe indicator auto-refreshes periodically while the admin panel is open so the state does not appear stale.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Add admin dashboard globe status icon that is illuminated/colorful and spinning when system is active, and gray/unlit/static when offline",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Add 'Site Operational Status' section in admin panel to indicate whether the site is operational and accepting funds, in test mode, or in standby",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Add clear Stripe mode indicators in admin panel: green light for Live mode and red light for Test mode next to the Stripe Test/Live toggle/label",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "projectName": "Add clear Stripe live/test indicators and operational status globe in Admin panel",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

@@ -1,0 +1,91 @@
+{
+  "kind": "build_request",
+  "title": "Add clear Stripe live/test indicators and operational status globe in Admin panel",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "In the Admin panel Stripe configuration screen, add an always-visible \"Stripe Mode Status\" indicator next to the existing Stripe test/live mode control that clearly shows:\n- Green light (small circular LED-style dot) when Stripe is in Live mode\n- Red light (small circular LED-style dot) when Stripe is in Test mode\nAlso add a short, unambiguous label under/near the indicator (e.g., \"Live payments active\" vs \"Test mode — sandbox only\").",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "In the admin panel where it says stripe test/ live mode I can't tell if it is in test mode or live mode, can we add a green light for live and a red lite for test."
+        ]
+      },
+      "acceptanceCriteria": [
+        "When the Stripe mode toggle is set to Live, a green LED-style dot is shown and the label indicates Live payments are active.",
+        "When the Stripe mode toggle is set to Test, a red LED-style dot is shown and the label indicates Test/sandbox mode.",
+        "The indicator is visually adjacent to the existing Stripe Mode control in AdminStripeConfig and requires no page scrolling to find."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Add a \"Site Operational Status\" section to the admin panel (within the Stripe Config tab) that summarizes whether the site is operational and accepting funds, in test mode, or in standby, based on the current Stripe verification status:\n- Operational / Accepting funds: Stripe keys verified AND Stripe mode is Live\n- Test mode: Stripe keys verified AND Stripe mode is Test\n- Standby: Stripe keys are not verified/invalid OR verification status is unavailable\nThe section must show the current state as plain English text.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "I need you to add a section in the admin panel that verifies if the site it operational and accepting funds or in test mode or standby"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The admin can see one of exactly three states: Operational/Accepting funds, Test mode, or Standby.",
+        "The displayed state updates when the Stripe verification status changes (without requiring a full page reload).",
+        "All user-facing text in this section is in English."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Implement a globe status icon in the \"Site Operational Status\" section that visually reflects operational state:\n- When Operational/Accepting funds: globe is colorful/illuminated (glow effect) and continuously spinning\n- When not operational (Test mode or Standby): globe is gray/unlit and does not animate\nThe globe must be implemented as a UI icon/component rendered in the admin panel (no external services).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "I want you to make an icon that is a globe of the world, when it is active it is colored, illuminated and spinning, if it is off, then it should be gray, unlit and not moving,"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Operational state shows a visibly glowing, colored globe with a continuous spin animation.",
+        "Non-operational states show a gray globe with no animation and no glow.",
+        "The globe is present within the Admin Stripe Config area and is clearly associated with the site operational status."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Ensure the Stripe verification status used to drive the operational status section and globe indicator auto-refreshes periodically while the admin panel is open so the state does not appear stale.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "As every time I enter the admin panel it appears that we are still in test mode and the site is not live"
+        ]
+      },
+      "acceptanceCriteria": [
+        "While viewing the Stripe Config tab, the Stripe verification status query re-fetches on an interval (e.g., every few seconds) and the UI updates accordingly.",
+        "No console errors occur due to repeated polling/refetching."
+      ]
+    }
+  ],
+  "constraints": [
+    "Frontend immutable paths must not be edited: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui.",
+    "Backend must remain a single-actor Motoko canister (all logic in backend/main.mo); only add migration if state schema changes (not required for these UI-only changes).",
+    "Use English for any user-facing text."
+  ],
+  "nonGoals": [
+    "Implementing real Stripe API connectivity or changing how Stripe mode is actually detected server-side.",
+    "Adding third-party monitoring, real-time sockets, or external uptime checks beyond existing app data."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

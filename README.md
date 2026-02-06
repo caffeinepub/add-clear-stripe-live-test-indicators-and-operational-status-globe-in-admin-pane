@@ -1,2 +1,3 @@
-# add-clear-stripe-live-test-indicators-and-operational-status-globe-in-admin-pane
-Exported from Caffeine project: Add clear Stripe live/test indicators and operational status globe in Admin panel
+## 
+
+To run app build and run docker image: `docker build -t app . docker run -it --network host app`

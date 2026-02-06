@@ -1,0 +1,95 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-in-the-admin-panel-stripe-configuration-screen-add-an-always-visible-stripe-mode-status-indicator-next-to-the-existing-stripe-test-live-mode-control-that-clearly-shows-green-light-small-circular-led-style-dot-when-stripe-is-in-live-mode-red-light-small-circular-led-style-dot-when-stripe-is-in-test-mode-also-add-a-short-unambiguous-label-under-near-the-indicator-e-g-live-payments-active-vs-test-mode-sandbox-only",
+      "featureTitle": "In the Admin panel Stripe configuration screen, add an always-visible \"Stripe Mode Status\" indicator next to the existing Stripe test/live mode control that clearly shows:\n- Green light (small circular LED-style dot) when Stripe is in Live mode\n- Red light (small circular LED-style dot) when Stripe is in Test mode\nAlso add a short, unambiguous label under/near the indicator (e.g., \"Live payments active\" vs \"Test mode — sandbox only\").",
+      "files": [
+        "frontend/src/components/AdminStripeConfig.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "blob-storage@4.0.0",
+        "github-export-icp-cli@1.0.0",
+        "stripe@3.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-site-operational-status-section-to-the-admin-panel-within-the-stripe-config-tab-that-summarizes-whether-the-site-is-operational-and-accepting-funds-in-test-mode-or-in-standby-based-on-the-current-stripe-verification-status-operational-accepting-funds-stripe-keys-verified-and-stripe-mode-is-live-test-mode-stripe-keys-verified-and-stripe-mode-is-test-standby-stripe-keys-are-not-verified-invalid-or-verification-status-is-unavailable-the-section-must-show-the-current-state-as-plain-english-text",
+      "featureTitle": "Add a \"Site Operational Status\" section to the admin panel (within the Stripe Config tab) that summarizes whether the site is operational and accepting funds, in test mode, or in standby, based on the current Stripe verification status:\n- Operational / Accepting funds: Stripe keys verified AND Stripe mode is Live\n- Test mode: Stripe keys verified AND Stripe mode is Test\n- Standby: Stripe keys are not verified/invalid OR verification status is unavailable\nThe section must show the current state as plain English text.",
+      "files": [
+        "frontend/src/components/AdminStripeConfig.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "blob-storage@4.0.0",
+        "github-export-icp-cli@1.0.0",
+        "stripe@3.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-a-globe-status-icon-in-the-site-operational-status-section-that-visually-reflects-operational-state-when-operational-accepting-funds-globe-is-colorful-illuminated-glow-effect-and-continuously-spinning-when-not-operational-test-mode-or-standby-globe-is-gray-unlit-and-does-not-animate-the-globe-must-be-implemented-as-a-ui-icon-component-rendered-in-the-admin-panel-no-external-services",
+      "featureTitle": "Implement a globe status icon in the \"Site Operational Status\" section that visually reflects operational state:\n- When Operational/Accepting funds: globe is colorful/illuminated (glow effect) and continuously spinning\n- When not operational (Test mode or Standby): globe is gray/unlit and does not animate\nThe globe must be implemented as a UI icon/component rendered in the admin panel (no external services).",
+      "files": [
+        "frontend/src/components/AdminOperationalStatusGlobe.tsx",
+        "frontend/src/components/AdminStripeConfig.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "blob-storage@4.0.0",
+        "github-export-icp-cli@1.0.0",
+        "stripe@3.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-ensure-the-stripe-verification-status-used-to-drive-the-operational-status-section-and-globe-indicator-auto-refreshes-periodically-while-the-admin-panel-is-open-so-the-state-does-not-appear-stale",
+      "featureTitle": "Ensure the Stripe verification status used to drive the operational status section and globe indicator auto-refreshes periodically while the admin panel is open so the state does not appear stale.",
+      "files": [
+        "frontend/src/components/AdminStripeConfig.tsx",
+        "frontend/src/hooks/useQueries.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "blob-storage@4.0.0",
+        "github-export-icp-cli@1.0.0",
+        "stripe@3.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

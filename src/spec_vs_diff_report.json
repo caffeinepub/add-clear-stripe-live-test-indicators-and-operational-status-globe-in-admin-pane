@@ -1,0 +1,66 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-06T04:03:18.868Z",
+  "summary": "Diff adds an operational-status globe component and supporting CSS animation utilities, and updates AdminStripeConfig to import/use the globe plus Stripe verification hooks. However, the diff summary is truncated and does not provide clear evidence that the required Stripe Mode Status LED+label UI, the full Site Operational Status section with exactly three English states, or the required periodic auto-refresh of Stripe verification status are implemented as specified. The diff also includes unrelated/unrequested files/changes and modifies an explicitly immutable hook file.",
+  "missing_requirements": [
+    {
+      "id": "REQ-1",
+      "requirement": "Add an always-visible \"Stripe Mode Status\" indicator next to the existing Stripe test/live mode control with a green LED dot + \"Live payments active\" label in Live mode and a red LED dot + Test/sandbox label in Test mode.",
+      "reason": "AdminStripeConfig.tsx is truncated in the diff summary and shows no explicit implementation evidence (LED-style dot UI element and the required labels) adjacent to the Stripe mode control.",
+      "evidence": [
+        "frontend/src/components/AdminStripeConfig.tsx (truncated)"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "requirement": "Add a \"Site Operational Status\" section in the Stripe Config tab that shows exactly one of three English states (Operational/Accepting funds, Test mode, Standby) derived from Stripe verification status + Stripe mode, and updates without full reload.",
+      "reason": "Although AdminStripeConfig imports the globe component and uses the Stripe verification status hook, the truncated diff summary does not show any rendered \"Site Operational Status\" section or the exact three-state English text logic/UI.",
+      "evidence": [
+        "frontend/src/components/AdminStripeConfig.tsx (truncated)"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "requirement": "Ensure the Stripe verification status auto-refreshes periodically while the Stripe Config tab is open so the operational status/globe does not appear stale.",
+      "reason": "The diff summary does not show the Stripe verification status query being configured with a refetch interval (e.g., react-query `refetchInterval`) or any equivalent polling mechanism tied to the Stripe Config tab. A separate summary text file claims a 5-second interval, but the actual hook implementation is truncated and not evidenced.",
+      "evidence": [
+        "frontend/src/hooks/useQueries.ts (truncated)",
+        "frontend-file-summaries.txt (truncated)"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Added project_state.json tracking 'new_feature_requests' (AR-* entries) unrelated to runtime/product requirements.",
+      "reason": "Not requested by the BuildRequest; appears to be internal project metadata.",
+      "evidence": [
+        "project_state.json"
+      ]
+    },
+    {
+      "description": "Modified an explicitly immutable frontend path: frontend/src/hooks/useInternetIdentity.ts.",
+      "reason": "BuildRequest constraints state this file path must not be edited; the diff indicates it was modified, and the changes are not part of the requested Stripe/Admin UI features.",
+      "evidence": [
+        "frontend/src/hooks/useInternetIdentity.ts (truncated)"
+      ]
+    },
+    {
+      "description": "Added/updated frontend-file-summaries.txt containing broad feature descriptions (e.g., live API integrations, extensive marketing analytics, etc.).",
+      "reason": "Not requested by the BuildRequest; appears to be ancillary documentation/metadata rather than implementing the specified admin Stripe indicators.",
+      "evidence": [
+        "frontend-file-summaries.txt (truncated)"
+      ]
+    }
+  ],
+  "confidence": 0.55,
+  "changed_files": [
+    "frontend-file-summaries.txt",
+    "frontend/src/components/AdminOperationalStatusGlobe.tsx",
+    "frontend/src/components/AdminStripeConfig.tsx",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "project_state.json"
+  ]
+}
